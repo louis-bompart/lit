@@ -129,7 +129,7 @@
       ]
     },
     "test:dev": {
-      "command": "MODE=dev node ../../tests/run-web-tests.js \"development/**/*_test.js\" --config ../../tests/web-test-runner.config.js",
+      "command": "node ../../tests/run-web-tests.js \"development/**/*_test.js\" --config ../../tests/web-test-runner.config.js",
       "dependencies": [
         "build:ts",
         "../../tests:build"
@@ -137,13 +137,14 @@
       "env": {
         "BROWSERS": {
           "external": true
-        }
+        },
+        "MODE": "dev"
       },
       "files": [],
       "output": []
     },
     "test:prod": {
-      "command": "MODE=prod node ../../tests/run-web-tests.js \"development/**/*_test.js\" --config ../../tests/web-test-runner.config.js",
+      "command": "node ../../tests/run-web-tests.js \"development/**/*_test.js\" --config ../../tests/web-test-runner.config.js",
       "dependencies": [
         "build",
         "../../tests:build"
@@ -151,7 +152,8 @@
       "env": {
         "BROWSERS": {
           "external": true
-        }
+        },
+        "MODE": "prod"
       },
       "files": [],
       "output": []
@@ -160,6 +162,7 @@
   "author": "Google LLC",
   "devDependencies": {
     "@lit-internal/scripts": "^1.0.1",
+    "sinon": "^21.1.2",
     "@types/trusted-types": "^2.0.2"
   },
   "dependencies": {
