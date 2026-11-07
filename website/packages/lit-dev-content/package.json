@@ -10,6 +10,7 @@
     "build": "wireit",
     "build:cloudflare": "npm run build:ts -w lit-dev-server && LITDEV_ENV=cloudflare npm run prod:build && node ../lit-dev-server/cloudflare-prepare.mjs",
     "build:ts": "wireit",
+    "build:monorepo-deps": "wireit",
     "build:rollup": "wireit",
     "build:samples": "wireit",
     "build:unversioned-docs": "wireit",
@@ -104,7 +105,8 @@
     "build:ts": {
       "command": "tsc --build --pretty",
       "dependencies": [
-        "../lit-dev-tools-esm:build:ts"
+        "../lit-dev-tools-esm:build:ts",
+        "build:monorepo-deps"
       ],
       "files": [
         "src/**",
@@ -152,15 +154,31 @@
       "output": [
         "site/docs/unversioned/**"
       ]
+    },
+    "build:monorepo-deps": {
+      "#comment": [
+        "Packages from this monorepo that the site uses through npm workspaces.",
+        "They are built from source instead of being installed from npm."
+      ],
+      "dependencies": [
+        "../../../packages/lit:build",
+        "../../../packages/context:build",
+        "../../../packages/task:build",
+        "../../../packages/react:build",
+        "../../../packages/localize:build",
+        "../../../packages/labs/eleventy-plugin-lit:build",
+        "../../../packages/labs/motion:build",
+        "../../../packages/labs/ssr-client:build",
+        "../../../packages/labs/task:build"
+      ]
     }
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
     "@11ty/eleventy-navigation": "^0.3.2",
     "@11ty/eleventy-plugin-rss": "^1.1.2",
-    "@lit-labs/eleventy-plugin-lit": "^1.0.3",
-    "@lit-labs/ssr": "3.1.9",
-    "@lit-labs/ssr-client": "^1.1.1",
+    "@lit-labs/eleventy-plugin-lit": "^1.0.6",
+    "@lit-labs/ssr-client": "^1.1.8",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
@@ -191,7 +209,7 @@
     "@lit-labs/signals": "^0.1.1",
     "@lit-labs/task": "^3.0.2",
     "@lit/context": "^1.1.0",
-    "@lit/localize": "^0.10.0",
+    "@lit/localize": "^0.12.2",
     "@lit/react": "^1.0.0 || 1.0.0-pre.0",
     "@lit/task": "^1.0.0 || 1.0.0-pre.0",
     "@material/mwc-button": "^0.27.0",
@@ -204,7 +222,7 @@
     "@material/web": "^1.0.1",
     "@webcomponents/template-shadowroot": "^0.2.1",
     "algoliasearch": "^5.20.1",
-    "lit": "^2.8.0",
+    "lit": "^3.3.0",
     "postdoc-lib": "^1.0.3",
     "search-insights": "^2.17.3",
     "tarts": "^1.0.0",

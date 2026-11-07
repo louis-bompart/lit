@@ -9,6 +9,42 @@ import resolve from '@rollup/plugin-node-resolve';
 import summary from 'rollup-plugin-summary';
 import {terser} from 'rollup-plugin-terser';
 import minifyHTML from 'rollup-plugin-minify-html-literals';
+import {createRequire} from 'module';
+import * as fs from 'fs';
+import * as path from 'path';
+
+const require = createRequire(import.meta.url);
+
+// Packages that come from this monorepo's workspaces are resolved to their real
+// path (e.g. packages/lit-html/lit-html.js), which has no node_modules/
+// segment. Map those real directories back to package names.
+const workspacePackageDirs = [
+  'lit',
+  'lit-html',
+  'lit-element',
+  '@lit/reactive-element',
+  '@lit-labs/ssr-client',
+].map((name) => {
+  // Not require.resolve(`${name}/package.json`): package exports may hide it.
+  const dir = require.resolve
+    .paths(name)
+    .map((nodeModules) => path.join(nodeModules, name))
+    .find((candidate) => fs.existsSync(candidate));
+  return [fs.realpathSync(dir) + path.sep, name];
+});
+
+/**
+ * Returns the bare package name and module of a resolved module id, e.g.
+ * "lit-html/lit-html.js".
+ */
+const toBareModule = (id) => {
+  for (const [dir, name] of workspacePackageDirs) {
+    if (id.startsWith(dir)) {
+      return `${name}/${id.slice(dir.length)}`;
+    }
+  }
+  return id.replace(/^.*\/node_modules\//, '');
+};
 
 const terserOptions = {
   warnings: true,
@@ -64,11 +100,10 @@ export default [
         // Create some more logical shared chunks. In particular, people will
         // probably be looking for lit.js in devtools!
         //
-        // The id is the full resolved path to the module in node_modules/
-        // (which could be in this package, or in the root package). Remove the
-        // node_modules/ path prefix to get a relative path which is just the
-        // bare package name and module.
-        const relative = id.replace(/^.*\/node_modules\//, '');
+        // The id is the full resolved path to the module, in node_modules/ or
+        // in a workspace package of the monorepo. Turn it into a relative path
+        // which is just the bare package name and module.
+        const relative = toBareModule(id);
         if (
           relative.startsWith('lit/') ||
           relative.startsWith('lit-html/') ||
