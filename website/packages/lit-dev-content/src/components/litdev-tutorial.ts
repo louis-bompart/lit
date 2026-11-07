@@ -370,13 +370,12 @@ export class LitDevTutorial extends LitElement {
         </a>
         <span class="tutorial-metadata">
           ${this._manifestTask.render({
-            complete: (manifest) => html` <span class="tutorial-title"
-                >${manifest?.header}</span
-              >
-              <span class="title-separator">${diamondIcon}</span>
-              <span class="step-text">Step</span>
-              <span class="number">${this._idx + 1}</span>
-              / <span class="number">${manifest?.steps.length}</span>`,
+            complete: (manifest) =>
+              html` <span class="tutorial-title">${manifest?.header}</span>
+                <span class="title-separator">${diamondIcon}</span>
+                <span class="step-text">Step</span>
+                <span class="number">${this._idx + 1}</span>
+                / <span class="number">${manifest?.steps.length}</span>`,
           })}
         </span>
       </div>
@@ -465,9 +464,10 @@ export class LitDevTutorial extends LitElement {
     return html`<div id="tutorialFooter">
         ${when(
           !this._manifest.steps[this._idx].noSolve,
-          () => html`<litdev-icon-button @click=${this._onClickSolve}>
-            ${solveIcon} Solve
-          </litdev-icon-button>`
+          () =>
+            html`<litdev-icon-button @click=${this._onClickSolve}>
+              ${solveIcon} Solve
+            </litdev-icon-button>`
         )}
         ${this._manifestTask.render({
           complete: (manifest) => this._renderCodeCheckButton(manifest),
@@ -682,7 +682,7 @@ export class LitDevTutorial extends LitElement {
     if (hash.startsWith('#')) {
       hash = hash.slice(1);
     }
-    this._idx = hash === '' ? 0 : this._slugToIdx(hash) ?? this._idx;
+    this._idx = hash === '' ? 0 : (this._slugToIdx(hash) ?? this._idx);
     if (hash.startsWith('0')) {
       // In an earlier URL scheme, we indexed steps from 0, and left-padded with
       // "0"s. Now we index from 1, and conveniently use the fact that we also

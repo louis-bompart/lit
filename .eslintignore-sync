@@ -5,5 +5,7 @@
 packages/{*,labs/*,labs/test-projects/*}/{.gitignore,.eslintignore}
 
 [inline]
+# The lit.dev website hasn't adopted the monorepo's ESLint config yet.
+website/
 packages/localize/testdata/
 packages/localize/examples/
