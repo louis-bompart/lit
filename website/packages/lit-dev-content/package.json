@@ -84,7 +84,7 @@
       "dependencies": [
         "../lit-dev-tools-esm:build",
         {
-          "script": "../../:start:fake-github",
+          "script": "../../../:start:website:fake-github",
           "cascade": false
         },
         {

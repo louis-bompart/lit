@@ -7,6 +7,7 @@
 
 import {startDevServer, DevServerConfig} from '@web/dev-server';
 import {fileURLToPath} from 'url';
+import {createRequire} from 'module';
 import * as pathlib from 'path';
 import {redirectMiddleware} from 'lit-dev-server/lib/middleware/redirect-middleware.js';
 import {playgroundMiddleware} from 'lit-dev-server/lib/middleware/playground-middleware.js';
@@ -108,7 +109,9 @@ startDevServer({
 startDevServer({
   config: {
     port: ENV.playgroundPort,
-    rootDir: pathlib.resolve(REPO_ROOT, 'node_modules', 'playground-elements'),
+    rootDir: pathlib.dirname(
+      createRequire(import.meta.url).resolve('playground-elements/package.json')
+    ),
     middleware: [playgroundMiddleware()],
   },
   // Ignore any CLI flags. In particular we only want --open to apply to the

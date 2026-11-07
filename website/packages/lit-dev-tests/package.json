@@ -35,7 +35,7 @@
       "command": "playwright install && playwright test --config=lib/playwright.config.js",
       "dependencies": [
         "build",
-        "../../:start"
+        "../../../:start:website"
       ],
       "files": [
         "src/**/*.png",
@@ -47,7 +47,7 @@
       "command": "playwright install && playwright test --config=lib/playwright.config.js --update-snapshots",
       "dependencies": [
         "build",
-        "../../:start"
+        "../../../:start:website"
       ],
       "files": [],
       "output": [
@@ -64,7 +64,7 @@
       "command": "node lib/check-broken-links.js",
       "dependencies": [
         "build",
-        "../../:start"
+        "../../../:start:website"
       ],
       "files": [
         "known-good-urls.txt"
@@ -89,7 +89,7 @@
     }
   },
   "dependencies": {
-    "@playwright/test": "~1.26.1",
+    "@playwright/test": "1.55.0",
     "@types/ansi-escape-sequences": "^4.0.0",
     "@types/node": "^16.0.0",
     "ansi-escape-sequences": "^6.2.1",

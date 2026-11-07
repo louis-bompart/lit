@@ -10,6 +10,7 @@ import koaStatic from 'koa-static';
 import koaConditionalGet from 'koa-conditional-get';
 import koaEtag from 'koa-etag';
 import {fileURLToPath} from 'url';
+import {createRequire} from 'module';
 import * as path from 'path';
 import * as fs from 'fs';
 import {redirectMiddleware} from './middleware/redirect-middleware.js';
@@ -35,7 +36,11 @@ const repoRoot = path.resolve(__dirname, '..', '..', '..');
 const contentPackage = path.resolve(repoRoot, 'packages', 'lit-dev-content');
 const staticRoot =
   mode === 'playground'
-    ? path.join(repoRoot, 'node_modules', 'playground-elements')
+    ? path.dirname(
+        createRequire(import.meta.url).resolve(
+          'playground-elements/package.json'
+        )
+      )
     : path.join(contentPackage, ENV.eleventyOutDir);
 
 console.log(`mode: ${mode}`);

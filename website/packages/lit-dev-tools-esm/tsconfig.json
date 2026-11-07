@@ -4,7 +4,14 @@
     "rootDir": "src",
     "outDir": "lib",
     "incremental": true,
-    "tsBuildInfoFile": "lib/.tsbuildinfo"
+    "tsBuildInfoFile": "lib/.tsbuildinfo",
+    "paths": {
+      // This package uses Prettier 2 (synchronous `format`), installed in its
+      // own node_modules, which ships no types. Without this,
+      // TypeScript keeps walking up and picks the monorepo root's Prettier 3
+      // types instead of @types/prettier@2.
+      "prettier": ["../../../node_modules/@types/prettier/index.d.ts"]
+    }
   },
   "include": ["src/**/*.ts"],
   "exclude": []
