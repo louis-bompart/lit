@@ -89,16 +89,6 @@ npm run build:eleventy:watch   # Eleventy
 
 Serves at [`http://localhost:6415`](http://localhost:6415)
 
-### Start production Docker environment locally
-
-```sh
-docker build -t litdev . --build-arg LITDEV_ENV=local
-docker run --rm --name litdev -p 6415:6415 -e LITDEV_ENV=local -e MODE=main litdev
-docker run --rm --name litdev-playground -p 6416:6416 -e LITDEV_ENV=local -e MODE=playground litdev
-```
-
-Serves at [`http://localhost:6415`](http://localhost:6415)
-
 ### Updating screenshots tests
 
 Unless you are using Linux, screenshot test goldens need to be created by
