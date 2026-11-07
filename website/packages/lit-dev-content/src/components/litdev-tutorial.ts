@@ -433,7 +433,7 @@ export class LitDevTutorial extends LitElement {
         complete: (response) => {
           // guard on the response so that we do not needlessly run the parser
           // on every render.
-          return guard(response, () => {
+          return guard([response], () => {
             // Must use DOM parser to attach declarative shadow roots.
             // Casted as `any` because TS DOMParser types do not yet include the
             // options parameter that allows DSD.

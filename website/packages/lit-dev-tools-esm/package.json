@@ -21,7 +21,8 @@
       "command": "tsc --build --pretty",
       "dependencies": [
         "../lit-dev-server:build",
-        "../lit-dev-tools-cjs:build"
+        "../lit-dev-tools-cjs:build",
+        "../../../packages/ts-transformers:build"
       ],
       "files": [
         "src/**",
@@ -46,7 +47,7 @@
     }
   },
   "dependencies": {
-    "@lit/ts-transformers": "^1.1.1",
+    "@lit/ts-transformers": "^2.0.2",
     "@types/co-body": "^6.1.0",
     "@types/prettier": "^2.3.2",
     "@web/dev-server": "^0.1.6",
