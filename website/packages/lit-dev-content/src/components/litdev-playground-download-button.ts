@@ -49,7 +49,9 @@ export class LitDevPlaygroundDownloadButton extends LitElement {
     }));
     const tar = Tar(tarFiles);
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([tar], {type: 'application/tar'}));
+    a.href = URL.createObjectURL(
+      new Blob([tar as Uint8Array<ArrayBuffer>], {type: 'application/tar'})
+    );
     a.download = 'lit-playground.tar';
     a.click();
   }

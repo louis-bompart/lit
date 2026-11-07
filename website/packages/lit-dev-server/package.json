@@ -67,7 +67,8 @@
     "koa-send": "^5.0.0",
     "koa-static": "^5.0.0",
     "lit-dev-tools-cjs": "^0.0.0",
-    "node-fetch": "^3.2.10"
+    "node-fetch": "^3.2.10",
+    "playground-elements": "^0.21.2"
   },
   "devDependencies": {
     "@types/koa": "^2.11.6",

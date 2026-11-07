@@ -12,7 +12,8 @@
     "packages/labs/test-projects/*",
     "packages/localize/examples/*",
     "examples/*",
-    "playground"
+    "playground",
+    "website/packages/*"
   ],
   "scripts": {
     "benchmarks": "cd packages/benchmarks && npm run benchmarks",
@@ -20,6 +21,8 @@
     "build": "wireit",
     "build:ts": "wireit",
     "build:lit-starter-ts": "wireit",
+    "build:website": "wireit",
+    "build:website:cloudflare": "npm run build:cloudflare -w lit-dev-content && npm run build -w lit-dev-playground",
     "fix": "npm run lint:fix && npm run format:fix",
     "format": "npm run format:fix",
     "format:check": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --check",
@@ -39,7 +42,13 @@
     "version": "npm run changeset version && npm run update-version-vars",
     "update-version-vars": "node scripts/update-version-variables.js",
     "release": "npm run build && npm run changeset publish",
-    "benchmark:size": "wireit"
+    "benchmark:size": "wireit",
+    "start:website": "wireit",
+    "start:website:fake-github": "wireit",
+    "dev:website": "npm run dev:serve -w lit-dev-content --watch",
+    "test:website": "npm run test -w lit-dev-tools-cjs && npm run test:api:no-todos -w lit-dev-tests",
+    "test:website:integration": "npm run test:integration -w lit-dev-tests",
+    "test:website:links": "npm run test:links -w lit-dev-tests"
   },
   "wireit": {
     "build": {
@@ -261,6 +270,40 @@
       "files": [
         "rollup-common.js"
       ]
+    },
+    "build:website": {
+      "#comment": [
+        "The lit.dev website. Not part of `build` so that library changes",
+        "don't pay for an Eleventy build; see website/README.md."
+      ],
+      "dependencies": [
+        "./website/packages/lit-dev-api:build",
+        "./website/packages/lit-dev-content:build",
+        "./website/packages/lit-dev-playground:build",
+        "./website/packages/lit-dev-server:build",
+        "./website/packages/lit-dev-tests:build",
+        "./website/packages/lit-dev-tools-cjs:build",
+        "./website/packages/lit-dev-tools-esm:build"
+      ]
+    },
+    "start:website": {
+      "dependencies": [
+        "./website/packages/lit-dev-server:start:local:main",
+        "./website/packages/lit-dev-server:start:local:playground",
+        "start:website:fake-github"
+      ]
+    },
+    "start:website:fake-github": {
+      "command": "LITDEV_ENV=local node website/packages/lit-dev-tools-esm/lib/fake-github-server.js",
+      "dependencies": [
+        "./website/packages/lit-dev-tools-esm:build"
+      ],
+      "files": [],
+      "service": {
+        "readyWhen": {
+          "lineMatches": "server listening"
+        }
+      }
     }
   },
   "devDependencies": {

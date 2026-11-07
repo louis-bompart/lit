@@ -471,8 +471,6 @@ website/**/*.tsbuildinfo
 website/**/.wireit
 website/packages/lit-dev-playground/dist
 
-website/**/node_modules/
-website/**/package-lock.json
 website/packages/lit-dev-content/site/
 website/packages/lit-dev-content/_site/
 website/packages/*/lib/
