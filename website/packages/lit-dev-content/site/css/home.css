@@ -1,0 +1,42 @@
+@import url('./home/1-splash.css');
+@import url('./home/2-advantages.css');
+@import url('./home/3-tour.css');
+@import url('./home/4-build-anything.css');
+@import url('./home/5-who-is-using.css');
+@import url('./home/6-explore.css');
+@import url('./home/7-connect.css');
+
+html {
+  --home-side-margin: 2rem;
+}
+
+/* Fading lit-logo (see home.js) */
+
+#headerLogo::part(svg) {
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
+.splashLogoScrolled #headerLogo::part(svg),
+#homeLink:hover > #headerLogo::part(svg),
+#homeLink:focus > #headerLogo::part(svg) {
+  opacity: 1;
+}
+
+/* Copy */
+
+p {
+  line-height: 1.7em;
+  font-size: 16px;
+}
+
+/* Large section headings with blue underline */
+
+.homeSectionHeading {
+  font-size: 32px;
+  font-weight: 500;
+  border-bottom: 2px solid var(--sys-color-primary);
+  padding: 0.7em 0;
+  margin: 0;
+}
+

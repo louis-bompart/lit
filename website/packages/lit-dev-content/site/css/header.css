@@ -1,0 +1,136 @@
+.pageHeader {
+  position: sticky;
+  top: 0;
+  height: var(--header-nav-height);
+  /* CodeMirrors have a very high z-index for some reason. */
+  z-index: 4;
+  background-color: var(--sys-color-surface-container-lowest);
+  display: flex;
+  padding: 0 1.5em;
+  justify-content: stretch;
+  border-bottom: 1px solid var(--sys-color-outline-variant);
+  box-sizing: border-box;
+  box-shadow: 0 1px 5px 0 rgb(0 0 0 / 10%);
+}
+
+#headerLogo::part(svg) {
+  height: 2em;
+  width: 76.5px;
+  padding: 0.1em 0.5em;
+}
+
+.pageHeader > nav {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: var(--header-footer-max-width, unset);
+  margin: var(--header-footer-margin, unset);
+}
+
+.navItem a svg {
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
+}
+
+#desktopNav {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+#desktopNav .navItem a,
+#desktopNav .navItem litdev-search-modal {
+  font-weight: 600;
+  padding: 0.3em 0.5em;
+  font-size: 0.9em;
+}
+
+#desktopNav .navItem a {
+  margin-inline: 0.25em;
+}
+#desktopNav .navItem litdev-version-selector {
+  margin-inline-end: 0.25em;
+}
+
+#desktopNav .icons .navItem > *{
+  margin-inline-start: 0;
+}
+
+#desktopNav .navItem,
+#desktopNav .navItem a {
+  color: var(--sys-color-on-background-dim);
+}
+
+#desktopNav .navItem {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+#desktopNav .icons,
+#mobile-site-controls .icons {
+  padding-inline-start: 0;
+}
+
+#desktopNav .icons,
+#mobile-site-controls .icons,
+#desktopNav .icons .navItem,
+#mobile-site-controls .icons .navItem,
+#desktopNav .icons .navItem > *,
+#mobile-site-controls .icons .navItem > * {
+  display: flex;
+  align-items: center;
+}
+
+#mobile-site-controls .icons .navItem > * {
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+}
+
+@supports not selector(:modal) {
+  litdev-search-modal {
+      display: none !important;
+  }
+}
+
+#desktopNav .navItem *:hover {
+  color: var(--sys-color-primary-variant);
+}
+
+#desktopNav .navItem.active {
+  background-color: var(--sys-color-primary);
+  border-radius: 12px;
+}
+
+#desktopNav .navItem.active * {
+  color: var(--sys-color-on-primary);
+}
+
+#desktopNav .navItem.active option,
+#desktopNav .navItem option {
+  /* Chrome linux allows setting colors so let's leave as-is */
+  color: initial;
+}
+
+#mobileMenuButton {
+  display: none;
+}
+
+@media (max-width: 864px) {
+  #desktopNav {
+    display: none;
+  }
+
+  #mobileMenuButton {
+    display: flex;
+  }
+
+  .pageHeader {
+    padding: 0 0.5em;
+  }
+}

@@ -1,0 +1,27 @@
+<header class="pageHeader">
+  <nav>
+    <a id="homeLink" href="{{ site.baseurl }}/" aria-label="Home">
+      <lazy-svg
+        id="headerLogo"
+        svg-role="img"
+        href="{{ site.baseurl }}/images/logo.svg#full"
+        label="Lit Home"
+        loading="eager">
+      </lazy-svg>
+    </a>
+
+    <ol id="desktopNav">
+      {% set isDesktopNav = true %}
+      {% include 'site-nav.html' %}
+    </ol>
+
+    <litdev-ripple-icon-button
+      id="mobileMenuButton"
+      label="Open menu"
+    >
+      <svg height="24" width="24" fill="currentcolor">
+        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+      </svg>
+    </litdev-ripple-icon-button>
+  </nav>
+</header>

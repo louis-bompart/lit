@@ -1,0 +1,16 @@
+#container-404 {
+  max-width: 800px;
+  margin: auto;
+  padding: 64px 0;
+  text-align: center;
+}
+
+h1 {
+  color: var(--sys-color-on-background-emphasize);
+  font-size: 42px;
+  font-weight: 400;
+}
+
+#footerTop {
+  border-top: 1px solid var(--sys-color-primary);
+}
