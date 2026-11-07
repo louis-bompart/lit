@@ -49,9 +49,15 @@ export async function waitForPlaygroundPreviewToLoad(page: Page) {
     return true;
   }, iframe);
   // Hide the animated loading indicator.
-  await page.evaluate((el) => {
-    el.style.visibility = 'hidden';
-  }, await page.waitForSelector('playground-preview [part="preview-loading-indicator"]', {state: 'attached'}));
+  await page.evaluate(
+    (el) => {
+      el.style.visibility = 'hidden';
+    },
+    await page.waitForSelector(
+      'playground-preview [part="preview-loading-indicator"]',
+      {state: 'attached'}
+    )
+  );
 }
 
 interface MwcSnackbar extends HTMLElement {
