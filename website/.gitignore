@@ -15,9 +15,6 @@ packages/lit-dev-content/src/public-vars.ts
 # `npm run build:unversioned-docs -w lit-dev-content`
 packages/lit-dev-content/site/docs/unversioned
 
-packages/lit-dev-api/api-data/*/repo/
-packages/lit-dev-api/api-data/*/INSTALLED
-
 # We only want to keep '-linux' screenshots which are tested by Github Actions.
 packages/lit-dev-tests/src/playwright/**/*.png
 !packages/lit-dev-tests/src/playwright/**/*-linux.png

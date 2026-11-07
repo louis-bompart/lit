@@ -96,6 +96,10 @@
     },
     {
       "page": "directives",
+      "anchor": "UnsafeMathDirective.constructor"
+    },
+    {
+      "page": "directives",
       "anchor": "UnsafeSVGDirective.constructor"
     },
     {
@@ -268,6 +272,10 @@
     },
     {
       "page": "directives",
+      "anchor": "UnsafeMathDirective.render"
+    },
+    {
+      "page": "directives",
       "anchor": "UnsafeSVGDirective.render"
     },
     {
@@ -373,6 +381,10 @@
     {
       "page": "directives",
       "anchor": "UnsafeHTMLDirective.update"
+    },
+    {
+      "page": "directives",
+      "anchor": "UnsafeMathDirective.update"
     },
     {
       "page": "directives",
@@ -1093,28 +1105,6 @@
       "anchor": "directive"
     }
   ],
-  "$InternalPropertyDeclaration": [
-    {
-      "page": "decorators",
-      "anchor": "InternalPropertyDeclaration"
-    }
-  ],
-  "$hasChanged": [
-    {
-      "page": "decorators",
-      "anchor": "InternalPropertyDeclaration.hasChanged"
-    },
-    {
-      "page": "ReactiveElement",
-      "anchor": "PropertyDeclaration.hasChanged"
-    }
-  ],
-  "$InternalPropertyDeclaration.hasChanged": [
-    {
-      "page": "decorators",
-      "anchor": "InternalPropertyDeclaration.hasChanged"
-    }
-  ],
   "$QueryAssignedElementsOptions": [
     {
       "page": "decorators",
@@ -1159,6 +1149,82 @@
     {
       "page": "decorators",
       "anchor": "QueryAssignedNodesOptions.slot"
+    }
+  ],
+  "$StateDeclaration": [
+    {
+      "page": "decorators",
+      "anchor": "StateDeclaration"
+    }
+  ],
+  "$hasChanged": [
+    {
+      "page": "decorators",
+      "anchor": "StateDeclaration.hasChanged"
+    },
+    {
+      "page": "ReactiveElement",
+      "anchor": "PropertyDeclaration.hasChanged"
+    }
+  ],
+  "$StateDeclaration.hasChanged": [
+    {
+      "page": "decorators",
+      "anchor": "StateDeclaration.hasChanged"
+    }
+  ],
+  "$CustomElementDecorator": [
+    {
+      "page": "decorators",
+      "anchor": "CustomElementDecorator"
+    }
+  ],
+  "$EventOptionsDecorator": [
+    {
+      "page": "decorators",
+      "anchor": "EventOptionsDecorator"
+    }
+  ],
+  "$InternalPropertyDeclaration": [
+    {
+      "page": "decorators",
+      "anchor": "InternalPropertyDeclaration"
+    }
+  ],
+  "$PropertyDecorator": [
+    {
+      "page": "decorators",
+      "anchor": "PropertyDecorator"
+    }
+  ],
+  "$QueryAllDecorator": [
+    {
+      "page": "decorators",
+      "anchor": "QueryAllDecorator"
+    }
+  ],
+  "$QueryAssignedElementsDecorator": [
+    {
+      "page": "decorators",
+      "anchor": "QueryAssignedElementsDecorator"
+    }
+  ],
+  "$QueryAssignedNodesDecorator": [
+    {
+      "page": "decorators",
+      "anchor": "QueryAssignedNodesDecorator"
+    }
+  ],
+  "$QueryAsyncDecorator": [
+    {
+      "page": "decorators",
+      "anchor": "QueryAsyncDecorator"
+    }
+  ],
+  "$QueryDecorator": [
+    {
+      "page": "decorators",
+      "anchor": "QueryDecorator"
     }
   ],
   "$customElement": [
@@ -1209,6 +1275,12 @@
       "anchor": "queryAsync"
     }
   ],
+  "$standardProperty": [
+    {
+      "page": "decorators",
+      "anchor": "standardProperty"
+    }
+  ],
   "$state": [
     {
       "page": "decorators",
@@ -1251,6 +1323,12 @@
     {
       "page": "custom-directives",
       "anchor": "insertPart"
+    }
+  ],
+  "$isCompiledTemplateResult": [
+    {
+      "page": "custom-directives",
+      "anchor": "isCompiledTemplateResult"
     }
   ],
   "$isDirectiveResult": [
@@ -1905,6 +1983,10 @@
     },
     {
       "page": "directives",
+      "anchor": "UnsafeMathDirective.directiveName"
+    },
+    {
+      "page": "directives",
       "anchor": "UnsafeSVGDirective.directiveName"
     }
   ],
@@ -1918,6 +2000,10 @@
     {
       "page": "directives",
       "anchor": "UnsafeHTMLDirective.resultType"
+    },
+    {
+      "page": "directives",
+      "anchor": "UnsafeMathDirective.resultType"
     },
     {
       "page": "directives",
@@ -1946,6 +2032,49 @@
     {
       "page": "directives",
       "anchor": "unsafeHTML"
+    }
+  ],
+  "$UnsafeMathDirective": [
+    {
+      "page": "directives",
+      "anchor": "UnsafeMathDirective",
+      "excludeFromTOC": true
+    }
+  ],
+  "$UnsafeMathDirective.constructor": [
+    {
+      "page": "directives",
+      "anchor": "UnsafeMathDirective.constructor"
+    }
+  ],
+  "$UnsafeMathDirective.directiveName": [
+    {
+      "page": "directives",
+      "anchor": "UnsafeMathDirective.directiveName"
+    }
+  ],
+  "$UnsafeMathDirective.resultType": [
+    {
+      "page": "directives",
+      "anchor": "UnsafeMathDirective.resultType"
+    }
+  ],
+  "$UnsafeMathDirective.render": [
+    {
+      "page": "directives",
+      "anchor": "UnsafeMathDirective.render"
+    }
+  ],
+  "$UnsafeMathDirective.update": [
+    {
+      "page": "directives",
+      "anchor": "UnsafeMathDirective.update"
+    }
+  ],
+  "$unsafeMathML": [
+    {
+      "page": "directives",
+      "anchor": "unsafeMathML"
     }
   ],
   "$UnsafeSVGDirective": [
@@ -3216,6 +3345,22 @@
       "anchor": "LitElement.renderRoot"
     }
   ],
+  "$[metadata]": [
+    {
+      "page": "LitElement",
+      "anchor": "LitElement.[metadata]"
+    },
+    {
+      "page": "ReactiveElement",
+      "anchor": "ReactiveElement.[metadata]"
+    }
+  ],
+  "$LitElement.[metadata]": [
+    {
+      "page": "LitElement",
+      "anchor": "LitElement.[metadata]"
+    }
+  ],
   "$disableWarning": [
     {
       "page": "LitElement",
@@ -3786,6 +3931,12 @@
       "anchor": "ReactiveElement.renderRoot"
     }
   ],
+  "$ReactiveElement.[metadata]": [
+    {
+      "page": "ReactiveElement",
+      "anchor": "ReactiveElement.[metadata]"
+    }
+  ],
   "$ReactiveElement.disableWarning": [
     {
       "page": "ReactiveElement",
@@ -4164,6 +4315,18 @@
       "anchor": "PropertyDeclaration.type"
     }
   ],
+  "$useDefault": [
+    {
+      "page": "ReactiveElement",
+      "anchor": "PropertyDeclaration.useDefault"
+    }
+  ],
+  "$PropertyDeclaration.useDefault": [
+    {
+      "page": "ReactiveElement",
+      "anchor": "PropertyDeclaration.useDefault"
+    }
+  ],
   "$PropertyDeclaration.hasChanged": [
     {
       "page": "ReactiveElement",
@@ -4440,10 +4603,28 @@
       "anchor": "Initializer"
     }
   ],
+  "$MathMLTemplateResult": [
+    {
+      "page": "misc",
+      "anchor": "MathMLTemplateResult"
+    }
+  ],
+  "$MaybeCompiledTemplateResult": [
+    {
+      "page": "misc",
+      "anchor": "MaybeCompiledTemplateResult"
+    }
+  ],
   "$PropertyValues": [
     {
       "page": "ReactiveElement",
       "anchor": "PropertyValues"
+    }
+  ],
+  "$RenderRootNode": [
+    {
+      "page": "misc",
+      "anchor": "RenderRootNode"
     }
   ],
   "$SVGTemplateResult": [
@@ -4462,6 +4643,12 @@
     {
       "page": "templates",
       "anchor": "TemplateResult"
+    }
+  ],
+  "$UncompiledTemplateResult": [
+    {
+      "page": "misc",
+      "anchor": "UncompiledTemplateResult"
     }
   ],
   "$ValueSanitizer": [
@@ -4532,6 +4719,16 @@
     {
       "page": "static-html",
       "anchor": "html"
+    }
+  ],
+  "$mathml": [
+    {
+      "page": "misc",
+      "anchor": "mathml"
+    },
+    {
+      "page": "static-html",
+      "anchor": "mathml"
     }
   ],
   "$notEqual": [

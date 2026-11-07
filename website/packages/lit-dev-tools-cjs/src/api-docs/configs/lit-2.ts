@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+import * as os from 'os';
 import * as pathlib from 'path';
 import {ReflectionKind} from 'typedoc';
 
@@ -13,7 +14,14 @@ import type {ApiDocsConfig} from '../types.js';
 const root = pathlib.resolve(__dirname, '..', '..', '..', '..', '..');
 const dataDir = pathlib.join(root, 'packages', 'lit-dev-api', 'api-data');
 const workDir = pathlib.join(dataDir, 'lit-2');
-const gitDir = pathlib.join(workDir, 'repo');
+// Clone outside of the lit/lit monorepo that lit.dev lives in. Inside it, the
+// clone's own build would resolve modules and @types from the monorepo's root
+// node_modules. Override with LIT_DEV_API_CLONE_DIR.
+const gitDir = pathlib.join(
+  process.env.LIT_DEV_API_CLONE_DIR ??
+    pathlib.join(os.tmpdir(), 'lit-dev-api-clones'),
+  'lit-2'
+);
 const litDir = pathlib.join(gitDir, 'packages', 'lit');
 const srcDir = pathlib.join(litDir, 'src');
 

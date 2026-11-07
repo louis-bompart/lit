@@ -12,12 +12,17 @@
     "build": {
       "command": "node ../lit-dev-tools-cjs/lib/api-docs/generate.js",
       "dependencies": [
-        "../lit-dev-tools-cjs:build"
+        "../lit-dev-tools-cjs:build",
+        "../../../packages/lit:build:ts:types"
       ],
       "files": [
-        "lit/packages/*/src/**/*.ts"
+        "../../../packages/{lit,lit-element,lit-html,reactive-element}/src/**/*.ts"
       ],
-      "#comment": "We don't declare the api-data directory as output because it's super huge, >1.4GB and 120k files. Maintaining the cache is probably not worth it."
+      "#comment": [
+        "Lit 3 API docs are generated from this monorepo's own packages (built by",
+        "the dependency above). Lit 2 is still cloned at a pinned commit into",
+        "api-data/lit-2/repo, which we don't declare as output because it's huge."
+      ]
     }
   },
   "dependencies": {

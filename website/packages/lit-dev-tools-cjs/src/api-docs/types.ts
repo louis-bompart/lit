@@ -80,6 +80,14 @@ export interface ApiDocsConfig {
   gitDir: string;
 
   /**
+   * When true, `gitDir` is the lit/lit monorepo that lit.dev itself lives in,
+   * and it is analyzed in place: nothing is cloned, installed or set up, and
+   * `extraSetupCommands` are ignored. The analyzed packages must already be
+   * built, which the `lit-dev-api:build` Wireit script takes care of.
+   */
+  inPlace?: boolean;
+
+  /**
    * Path to the tsconfig.json that owns the entrypoint modules.
    */
   tsConfigPath: string;

@@ -11,10 +11,15 @@ import {lit2Config} from './lit-2.js';
 
 import type {ApiDocsConfig} from '../types.js';
 
+// lit.dev lives in the website/ directory of the lit/lit monorepo.
 const root = pathlib.resolve(__dirname, '..', '..', '..', '..', '..');
+const monorepoRoot = pathlib.resolve(root, '..');
 const dataDir = pathlib.join(root, 'packages', 'lit-dev-api', 'api-data');
 const workDir = pathlib.join(dataDir, 'lit-3');
-const gitDir = pathlib.join(workDir, 'repo');
+// Lit 3 is the current major version, so document it straight from this
+// monorepo's sources instead of a clone: API docs then always match the code in
+// the same commit.
+const gitDir = monorepoRoot;
 const litDir = pathlib.join(gitDir, 'packages', 'lit');
 const srcDir = pathlib.join(litDir, 'src');
 
@@ -23,13 +28,15 @@ const srcDir = pathlib.join(litDir, 'src');
  */
 export const lit3Config: ApiDocsConfig = {
   ...lit2Config,
-  commit: '12109c25997ef03180d7eefe05c64e0fb20dd2b0',
+  // Only used for GitHub source links.
+  commit: 'main',
+  inPlace: true,
   workDir,
   gitDir,
   tsConfigPath: pathlib.join(litDir, 'tsconfig.json'),
   pagesOutPath: pathlib.resolve(workDir, 'pages.json'),
   symbolsOutPath: pathlib.resolve(workDir, 'symbols.json'),
-  typedocRoot: pathlib.join(root, 'packages'),
+  typedocRoot: pathlib.join(monorepoRoot, 'packages'),
 
   entrypointModules: [
     pathlib.join(srcDir, 'async-directive.ts'),
@@ -41,30 +48,6 @@ export const lit3Config: ApiDocsConfig = {
     // Don't include polyfill-support.ts because it doesn't export anything.
     //   pathlib.join(srcDir, 'polyfill-support.ts'),
     pathlib.join(srcDir, 'static-html.ts'),
-  ],
-
-  extraSetupCommands: [
-    {
-      cmd: 'npm',
-      args: ['run', 'build:ts'],
-      // disable wireit cache for to avoid caching errors in Github Actions
-      env: {WIREIT_CACHE: 'none'},
-    },
-    // Apply file patch to fix typedoc errors during docs generation. Because
-    // `npm run build:ts` is run prior to this, the patch file can always be
-    // applied unless a change has occurred in the file being patched.
-    {
-      cmd: 'patch',
-      // directive-helpers contains an import of the private `ChildPart` class
-      // that typedoc cannot resolve. By stripping this import typedoc
-      // successfully generates API docs without changing the generated docs
-      // output.
-      args: [
-        'packages/lit-html/development/directive-helpers.d.ts',
-        '-i',
-        '../../../../../packages/lit-dev-tools-cjs/src/api-docs/lit-3-patches/fix-directive-helpers-declaration.patch',
-      ],
-    },
   ],
 
   pages: [
