@@ -1,29 +1,44 @@
 name: Website
 
-# Checks for the lit.dev website in website/. It is built from this repo's own
-# packages, so library changes run these checks too.
+# Checks, builds and deploys the lit.dev website in website/. It is built from
+# this repo's own packages, so library changes run it too.
+#
+# Deploying to Cloudflare Workers is enabled by setting, on the repository:
+#   - secrets CLOUDFLARE_API_TOKEN (Workers Scripts: Edit) and
+#     CLOUDFLARE_ACCOUNT_ID
+#   - variables LITDEV_MAIN_URL and LITDEV_PLAYGROUND_URL, the public URLs of
+#     the lit-dev and lit-dev-playground Workers
+# Without them, the site is only built. Pushes to main (or a manual run) deploy
+# to production; pull requests from this repository get a Preview of both
+# Workers, deleted when the pull request is closed.
 
 on:
   push:
     branches:
       - main
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [opened, reopened, synchronize, closed]
     paths:
       - 'website/**'
       - 'packages/**'
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/website.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 env:
   WIREIT_LOGGER: quiet-ci
+  # Pinned so deploys don't change with each Wrangler release.
+  WRANGLER_VERSION: 4.152.0
+  SITE_CONFIG: website/packages/lit-dev-content/wrangler.jsonc
+  PLAYGROUND_CONFIG: website/packages/lit-dev-playground/wrangler.jsonc
 
 jobs:
   unit-tests:
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -42,6 +57,7 @@ jobs:
   #
   #   npm run build -w lit-dev-api
   check-api-data-in-sync:
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -55,10 +71,24 @@ jobs:
       - name: Fail if API data is out of date
         run: git diff --exit-code -- website/packages/lit-dev-api/api-data
 
-  # Same build as the Cloudflare Workers Builds projects (see
-  # website/packages/lit-dev-content/wrangler.jsonc).
-  build-cloudflare:
+  build-and-deploy:
+    if: github.event.action != 'closed'
+    needs: [unit-tests, check-api-data-in-sync]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    concurrency:
+      group: website-deploy-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+    env:
+      # Deploy only where Cloudflare is configured, and not for pull requests
+      # from other forks, which don't get the secrets.
+      DEPLOY: ${{ vars.LITDEV_MAIN_URL != '' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+      PREVIEW: ${{ github.event_name == 'pull_request' }}
+      PREVIEW_NAME: pr-${{ github.event.pull_request.number }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -67,7 +97,75 @@ jobs:
           cache: 'npm'
           cache-dependency-path: package-lock.json
       - run: npm ci
-      - run: npm run build:website:cloudflare
+
+      # The Playground sandbox goes first: the site is built with its URL.
+      - name: Build Playground sandbox
+        run: npm run build -w lit-dev-playground
+
+      - name: Deploy Playground sandbox
+        if: env.DEPLOY == 'true' && env.PREVIEW != 'true'
+        run: npx --yes "wrangler@$WRANGLER_VERSION" deploy -c "$PLAYGROUND_CONFIG"
+
+      - name: Deploy Playground sandbox Preview
+        id: playground-preview
+        if: env.DEPLOY == 'true' && env.PREVIEW == 'true'
         env:
-          LITDEV_MAIN_URL: https://lit-dev.example.workers.dev
-          LITDEV_PLAYGROUND_URL: https://lit-dev-playground.example.workers.dev/
+          WRANGLER_OUTPUT_FILE_PATH: ${{ runner.temp }}/playground-preview.ndjson
+        run: |
+          npx --yes "wrangler@$WRANGLER_VERSION" preview --name "$PREVIEW_NAME" -c "$PLAYGROUND_CONFIG"
+          echo "url=$(node website/packages/lit-dev-server/cloudflare-preview-url.mjs "$WRANGLER_OUTPUT_FILE_PATH")" >> "$GITHUB_OUTPUT"
+
+      - name: Build site
+        run: npm run build:cloudflare -w lit-dev-content
+        env:
+          LITDEV_MAIN_URL: ${{ vars.LITDEV_MAIN_URL || 'https://lit-dev.example.workers.dev' }}
+          LITDEV_PLAYGROUND_URL: ${{ steps.playground-preview.outputs.url || vars.LITDEV_PLAYGROUND_URL || 'https://lit-dev-playground.example.workers.dev/' }}
+
+      - name: Deploy site
+        if: env.DEPLOY == 'true' && env.PREVIEW != 'true'
+        run: npx --yes "wrangler@$WRANGLER_VERSION" deploy -c "$SITE_CONFIG"
+
+      - name: Deploy site Preview
+        id: site-preview
+        if: env.DEPLOY == 'true' && env.PREVIEW == 'true'
+        env:
+          WRANGLER_OUTPUT_FILE_PATH: ${{ runner.temp }}/site-preview.ndjson
+        run: |
+          npx --yes "wrangler@$WRANGLER_VERSION" preview --name "$PREVIEW_NAME" -c "$SITE_CONFIG"
+          echo "url=$(node website/packages/lit-dev-server/cloudflare-preview-url.mjs "$WRANGLER_OUTPUT_FILE_PATH")" >> "$GITHUB_OUTPUT"
+
+      - name: Comment Preview URLs
+        if: env.DEPLOY == 'true' && env.PREVIEW == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          SITE_URL: ${{ steps.site-preview.outputs.url }}
+          PLAYGROUND_URL: ${{ steps.playground-preview.outputs.url }}
+        run: |
+          body="**lit.dev Preview** for $(git rev-parse --short HEAD)
+
+          - Site: $SITE_URL
+          - Playground sandbox: $PLAYGROUND_URL"
+          gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --edit-last --create-if-none --body "$body"
+
+  delete-preview:
+    if: github.event.action == 'closed' && vars.LITDEV_MAIN_URL != '' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      PREVIEW_NAME: pr-${{ github.event.pull_request.number }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          sparse-checkout: |
+            website/packages/lit-dev-content/wrangler.jsonc
+            website/packages/lit-dev-playground/wrangler.jsonc
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 24.5
+      - name: Delete Previews
+        run: |
+          npx --yes "wrangler@$WRANGLER_VERSION" preview delete --name "$PREVIEW_NAME" --skip-confirmation -c "$SITE_CONFIG"
+          npx --yes "wrangler@$WRANGLER_VERSION" preview delete --name "$PREVIEW_NAME" --skip-confirmation -c "$PLAYGROUND_CONFIG"

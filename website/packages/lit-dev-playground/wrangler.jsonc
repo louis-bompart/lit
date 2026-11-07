@@ -2,10 +2,8 @@
 // assets. It must be on a different origin than the main site
 // (website/packages/lit-dev-content/wrangler.jsonc).
 //
-// Workers Builds settings (root directory: the lit/lit monorepo root `/`):
-//   Build command:  npm run build -w lit-dev-playground
-//   Deploy command: npx wrangler deploy -c website/packages/lit-dev-playground/wrangler.jsonc
-//   Preview command: npx wrangler preview -c website/packages/lit-dev-playground/wrangler.jsonc
+// Built and deployed by the Website GitHub Actions workflow
+// (.github/workflows/website.yml), before the main site.
 {
   "name": "lit-dev-playground",
   "compatibility_date": "2025-11-01",

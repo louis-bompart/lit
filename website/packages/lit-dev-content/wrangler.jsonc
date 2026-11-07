@@ -1,15 +1,12 @@
 // lit.dev main site, deployed as a Cloudflare Worker with static assets.
 //
-// Workers Builds settings (root directory: the lit/lit monorepo root `/`):
-//   Build command:  npm run build:cloudflare -w lit-dev-content
-//   Deploy command: npx wrangler deploy -c website/packages/lit-dev-content/wrangler.jsonc
-//   Preview command: npx wrangler preview -c website/packages/lit-dev-content/wrangler.jsonc
-// and these build variables:
+// Built and deployed by the Website GitHub Actions workflow
+// (.github/workflows/website.yml), which also sets the build variables:
 //   LITDEV_MAIN_URL        Public URL of this Worker, e.g.
 //                          https://lit-dev.<subdomain>.workers.dev
 //   LITDEV_PLAYGROUND_URL  Public URL of the playground sandbox Worker
-//                          (website/packages/lit-dev-playground), e.g.
-//                          https://lit-dev-playground.<subdomain>.workers.dev/
+//                          (website/packages/lit-dev-playground), or of its
+//                          Preview for a pull request.
 {
   "name": "lit-dev",
   "compatibility_date": "2025-11-01",

@@ -98,11 +98,32 @@ sandbox at [`http://localhost:6416`](http://localhost:6416).
 ### Deploy to Cloudflare
 
 The site and the Playground sandbox are two Cloudflare Workers with static
-assets, deployed by Workers Builds with the repository root as root directory.
-The exact build and deploy commands and variables are in
-[`lit-dev-content/wrangler.jsonc`](./packages/lit-dev-content/wrangler.jsonc)
-and
-[`lit-dev-playground/wrangler.jsonc`](./packages/lit-dev-playground/wrangler.jsonc).
+assets,
+[`lit-dev`](./packages/lit-dev-content/wrangler.jsonc) and
+[`lit-dev-playground`](./packages/lit-dev-playground/wrangler.jsonc). The
+`Website` GitHub Actions workflow builds and deploys them with Wrangler, after
+the unit tests and the API data check pass:
+
+- A push to `main`, or a manual run, deploys both to production.
+- A pull request from this repository gets a Preview of both Workers, named
+  `pr-<number>`, and a comment with their URLs. The sandbox Preview is deployed
+  first, so the site Preview is built against it. Closing the pull request
+  deletes both Previews.
+- Pull requests from other forks are built but not deployed, because GitHub
+  doesn't give them the secrets.
+
+To enable deploys on a repository, set:
+
+| Name                    | Kind     | Value                                                 |
+| ----------------------- | -------- | ----------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`  | Secret   | An API token with the Workers Scripts edit permission |
+| `CLOUDFLARE_ACCOUNT_ID` | Secret   | The Cloudflare account that owns both Workers         |
+| `LITDEV_MAIN_URL`       | Variable | `https://lit-dev.<subdomain>.workers.dev`             |
+| `LITDEV_PLAYGROUND_URL` | Variable | `https://lit-dev-playground.<subdomain>.workers.dev/` |
+
+Without them, the workflow only builds the site. Previews use Cloudflare
+Workers Previews, which must be available on the account.
+
 To build both locally:
 
 ```sh
