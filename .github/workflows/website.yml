@@ -1,0 +1,73 @@
+name: Website
+
+# Checks for the lit.dev website in website/. It is built from this repo's own
+# packages, so library changes run these checks too.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - 'website/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/website.yml'
+
+permissions:
+  contents: read
+
+env:
+  WIREIT_LOGGER: quiet-ci
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 24.5
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run test:website
+
+  # The generated API docs data is checked in, because otherwise it is very hard
+  # to tell when something has changed or broken in it. The Lit 3 docs are
+  # generated from packages/, so a change to a public API or its doc comments
+  # must come with regenerated data:
+  #
+  #   npm run build -w lit-dev-api
+  check-api-data-in-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 24.5
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run build -w lit-dev-api
+      - name: Fail if API data is out of date
+        run: git diff --exit-code -- website/packages/lit-dev-api/api-data
+
+  # Same build as the Cloudflare Workers Builds projects (see
+  # website/packages/lit-dev-content/wrangler.jsonc).
+  build-cloudflare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 24.5
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run build:website:cloudflare
+        env:
+          LITDEV_MAIN_URL: https://lit-dev.example.workers.dev
+          LITDEV_PLAYGROUND_URL: https://lit-dev-playground.example.workers.dev/

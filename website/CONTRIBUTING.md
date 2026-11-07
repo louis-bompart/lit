@@ -10,18 +10,22 @@ We have a [Code of Conduct](https://github.com/lit/lit/blob/main/CODE_OF_CONDUCT
 
 ## Set up
 
+lit.dev lives in the `website/` directory of the
+[lit/lit](https://github.com/lit/lit) monorepo. Run commands from the
+repository root:
+
 ```bash
-git clone https://github.com/lit/lit.dev.git
-cd lit.dev
+git clone https://github.com/lit/lit.git
+cd lit
 npm ci
-npm run dev
+npm run dev:website
 ```
 
 ## Tests
 
 ### Run the suite of tests
 
-1. `npm test`
+1. `npm run test:website` (and `npm run test:website:integration` for the screenshot tests)
 
 Note, all screenshot tests will fail locally. This is because the goldens are generated specifically from the linux instance run by GitHub Actions. To update the goldens you must:
 

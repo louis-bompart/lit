@@ -1,11 +1,11 @@
 // lit.dev Playground sandbox, deployed as a Cloudflare Worker with static
 // assets. It must be on a different origin than the main site
-// (packages/lit-dev-content/wrangler.jsonc).
+// (website/packages/lit-dev-content/wrangler.jsonc).
 //
-// Workers Builds settings (root directory: the repository root `/`):
+// Workers Builds settings (root directory: the lit/lit monorepo root `/`):
 //   Build command:  npm run build -w lit-dev-playground
-//   Deploy command: npx wrangler deploy -c packages/lit-dev-playground/wrangler.jsonc
-//   Preview command: npx wrangler preview -c packages/lit-dev-playground/wrangler.jsonc
+//   Deploy command: npx wrangler deploy -c website/packages/lit-dev-playground/wrangler.jsonc
+//   Preview command: npx wrangler preview -c website/packages/lit-dev-playground/wrangler.jsonc
 {
   "name": "lit-dev-playground",
   "compatibility_date": "2025-11-01",

@@ -133,7 +133,8 @@
     "build:samples": {
       "command": "node ../lit-dev-tools-esm/lib/generate-js-samples.js",
       "dependencies": [
-        "../lit-dev-tools-esm:build"
+        "../lit-dev-tools-esm:build",
+        "build:monorepo-deps"
       ],
       "files": [
         "samples/**",
