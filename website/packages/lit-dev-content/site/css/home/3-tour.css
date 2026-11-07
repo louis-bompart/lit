@@ -1,0 +1,181 @@
+#tour {
+  padding: 7em var(--home-side-margin) 6em var(--home-side-margin);
+}
+
+#tour > * {
+  max-width: var(--content-max-width);
+  margin: auto;
+}
+
+#tourCodeAndNotes {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+#tourCode {
+  width: 620px;
+  --litdev-code-padding: 1.5em 2em;
+  --playground-code-font-size: 16px;
+  position: sticky;
+  top: calc(var(--header-height) + 2em);
+  align-self: flex-start;
+}
+
+#tourCode figure {
+  border: 1px solid #d1d1d1;
+  box-shadow: rgb(0 0 0 / 10%) 0px 0 5px 0px;
+  margin: 0;
+}
+
+body[code-language-preference="ts"] #tourJsCode {
+  display: none;
+}
+body[code-language-preference="js"] #tourTsCode {
+  display: none;
+}
+
+#tourJsCode > figure,
+#tourTsCode > figure {
+  /* Extra room for the JS/TS switch */
+  padding-top: 3em;
+  /* Space between JS/TS and HTML */
+  margin-bottom: 2em;
+}
+
+litdev-code-language-switch {
+  position: absolute;
+  font-size: 16px;
+  top: 14px;
+  right: 14px;
+}
+
+#tourCode .tourHighlight {
+  position: absolute;
+  transition: width 300ms;
+  transform: skew(-6deg);
+  z-index: -1;
+}
+
+#tourCode .tourHighlight:hover,
+#tourCode .tourHighlight.active {
+  cursor: pointer;
+  background-color: #ffe950;
+}
+
+body.dark .tourHighlight:hover,
+body.dark #tourCode .tourHighlight.active {
+  background-color: var(--sys-color-tertiary-container);
+}
+
+@media (prefers-color-scheme: dark) {
+  body:not(.light) .tourHighlight:hover,
+  body:not(.light) #tourCode .tourHighlight.active {
+    background-color: var(--sys-color-tertiary-container);
+  }
+}
+
+#tourCode .cm-line,
+#tourCode .cm-line > span {
+  z-index: 0;
+  position: relative;
+}
+
+#tourNotes {
+  margin-inline-start: calc(2em - 18px);
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  position: sticky;
+  top: calc(var(--header-height));
+  outline: none;
+}
+
+#tourNotes > div {
+  max-width: 680px;
+  margin-bottom: 19px;
+  padding-inline: 18px;
+  padding-block: 1px;
+}
+
+#tourNotes > div > h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--sys-color-on-background-emphasis);
+  margin: 12px 0 0 0;
+}
+
+#tourNotes > div.active {
+  background-color: var(--sys-color-surface-container);
+  border: 1px solid var(--sys-color-outline-variant);
+  border-inline-start: 4px solid var(--sys-color-primary);
+  padding-inline-start: 14px;
+  padding-inline-end: 17px;
+  padding-block: 0px;
+  box-shadow: rgb(0 0 0 / 20%) 0 0 5px 0;
+  cursor: pointer;
+  outline: none;
+}
+
+#tourNotes > div:focus {
+  outline: none;
+}
+
+#playgroundLink {
+  display: block;
+  background-color: var(--sys-color-primary);
+  color: var(--sys-color-on-primary);
+  padding: 10px 30px;
+  text-align: center;
+  margin-top: 2em;
+  font-weight: 600;
+}
+
+#playgroundLink:hover,
+#playgroundLink:focus {
+  background-color: var(--sys-color-primary-container);
+  color: var(--sys-color-on-primary-container);
+}
+
+@media (max-width: 1200px) {
+  #tourCode {
+    --playground-code-font-size: 14px;
+    width: 540px;
+  }
+
+  #tourNotes {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1000px) {
+  #tour {
+    padding-top: 0;
+  }
+
+  #tourCodeAndNotes {
+    flex-direction: column;
+  }
+
+  #tourCode {
+    width: 100%;
+    position: static;
+  }
+
+  #tourCode figure {
+    margin: 2em calc(-1  * var(--home-side-margin));
+    border-left: none;
+    border-right: none;
+  }
+
+  litdev-code-language-switch {
+    font-size: 13px;
+    top: 45px;
+    right: -20px;
+  }
+
+  #tourNotes {
+    margin-left: 0;
+    margin-top: 1em;
+  }
+}

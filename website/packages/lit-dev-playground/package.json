@@ -1,0 +1,15 @@
+{
+  "name": "lit-dev-playground",
+  "private": true,
+  "version": "0.0.0",
+  "description": "lit.dev Playground sandbox, deployed as a Cloudflare Worker with static assets",
+  "author": "Google LLC",
+  "license": "BSD-3-Clause",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "playground-elements": "^0.21.2"
+  }
+}

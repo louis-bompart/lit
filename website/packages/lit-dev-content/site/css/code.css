@@ -1,0 +1,58 @@
+body {
+  --playground-code-font-family: 'Roboto Mono', monospace;
+  --playground-code-font-size: 14px;
+  --playground-code-line-height: 1.6em;
+  --litdev-code-padding: 0.5em 0 0.5em 1em;
+  --playground-bar-height: 44px;
+  --playground-code-gutter-border-right: none;
+  --playground-tab-bar-active-color: var(--sys-color-on-primary-container);
+  --playground-tab-bar-active-background: var(--sys-color-primary-container);
+  --playground-tab-bar-indicator-color: transparent;
+}
+
+.cm-editor {
+  overflow-y: auto;
+}
+
+playground-preview,
+playground-preview::part(preview-toolbar)  {
+  background-color: var(--sys-color-background);
+  color: var(--sys-color-on-background);
+}
+
+playground-preview::part(preview-toolbar) {
+  border-bottom: 1px solid var(--sys-color-outline);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+playground-tab-bar {
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  box-sizing: border-box;
+}
+
+#tabsAndControls,
+playground-tab-bar {
+  background-color: var(--sys-color-surface-container-lowest);
+}
+
+playground-file-editor {
+  background-color: var(--playground-code-background);
+}
+
+#preview,
+#tutorialPreview {
+  background-color: var(--color-light-gray);
+}
+
+body[code-language-preference="ts"] litdev-switchable-sample > pre > code.language-js {
+  /* Hide JS samples when preference is TS. */
+  display: none;
+}
+
+body[code-language-preference="js"] litdev-switchable-sample > pre > code.language-ts {
+  /* Hide TS samples when preference is JS. */
+  display: none;
+}

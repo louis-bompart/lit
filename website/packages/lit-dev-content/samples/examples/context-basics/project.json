@@ -1,0 +1,11 @@
+{
+  "extends": "/samples/base.json",
+  "title": "Context Basics",
+  "description": "Share data from a provider element with Context.",
+  "section": "Managing Data",
+  "files": {
+    "elements.ts": {},
+    "index.html": {},
+    "styles.ts": {}
+  }
+}
