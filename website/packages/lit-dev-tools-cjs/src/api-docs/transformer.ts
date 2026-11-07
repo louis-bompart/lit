@@ -122,10 +122,11 @@ export class ApiDocsTransformer {
         (node as ExtendedDeclarationReflection).entrypointSources =
           entrypoint.sources;
         for (const source of node.sources ?? []) {
-          this.makeSourceRelativeToMonorepoRoot(source);
+          await this.makeSourceRelativeToMonorepoRoot(source);
           await this.updateSourceFromDtsToTs(source);
           this.setImportModuleSpecifier(source);
         }
+        await this.makeNestedSourcesRelativeToMonorepoRoot(node);
         this.choosePageLocation(node, ancestry);
         this.promoteVariableFunctions(node);
         this.promoteAccessorTypes(node);
@@ -758,10 +759,63 @@ export class ApiDocsTransformer {
    * them to be relative to the Lit monorepo root.
    */
   private async makeSourceRelativeToMonorepoRoot(source: SourceReference) {
-    source.fileName = pathlib.relative(
-      this.config.gitDir,
-      pathlib.resolve(this.config.typedocRoot, '..', source.fileName)
+    const absolute = pathlib.resolve(
+      this.config.typedocRoot,
+      '..',
+      source.fileName
     );
+    let relative = pathlib.relative(this.config.gitDir, absolute);
+    if (relative.startsWith('..')) {
+      // TypeDoc made the path relative to some other directory, e.g. when the
+      // repo is cloned outside of lit.dev, or behind a symlink like macOS's
+      // /var -> /private/var. Recover the part inside the repo.
+      this.realGitDir ??= await fs.realpath(this.config.gitDir);
+      const marker = this.realGitDir + pathlib.sep;
+      const idx = absolute.indexOf(marker);
+      if (idx !== -1) {
+        relative = absolute.slice(idx + marker.length);
+      }
+    }
+    source.fileName = relative;
+  }
+  private realGitDir?: string;
+
+  /**
+   * Apply `makeSourceRelativeToMonorepoRoot` to the sources nested in a node's
+   * signatures and types, which aren't visited as nodes themselves. Otherwise
+   * their paths depend on where the repo was cloned.
+   */
+  private async makeNestedSourcesRelativeToMonorepoRoot(
+    node: DeclarationReflection
+  ) {
+    const visit = async (value: unknown): Promise<void> => {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          await visit(item);
+        }
+      } else if (typeof value === 'object' && value !== null) {
+        for (const [key, child] of Object.entries(value)) {
+          if (key === 'sources' && Array.isArray(child)) {
+            for (const source of child as SourceReference[]) {
+              await this.makeSourceRelativeToMonorepoRoot(source);
+            }
+          } else {
+            await visit(child);
+          }
+        }
+      }
+    };
+    for (const [key, value] of Object.entries(node)) {
+      // The node's own sources are handled by the caller, its children are
+      // visited as nodes, and entrypointSources is shared between nodes.
+      if (
+        key !== 'sources' &&
+        key !== 'children' &&
+        key !== 'entrypointSources'
+      ) {
+        await visit(value);
+      }
+    }
   }
 
   /**

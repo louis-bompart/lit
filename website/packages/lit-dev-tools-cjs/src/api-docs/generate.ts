@@ -55,7 +55,10 @@ const clone = async ({repo, gitDir, commit}: ApiDocsConfig) => {
   await execFileAsync('git', ['checkout', commit], {cwd: gitDir});
 };
 
-const INSTALLED_FILE = 'INSTALLED';
+/**
+ * Marker file, next to the clone, recording the commit it was set up at.
+ */
+const installedMarker = (config: ApiDocsConfig) => `${config.gitDir}.INSTALLED`;
 
 /**
  * Run NPM install and other given setup commands.
@@ -70,11 +73,14 @@ const setup = async (config: ApiDocsConfig) => {
       env: {...process.env, ...env},
     });
   }
-  await fs.writeFile(pathlib.join(config.workDir, INSTALLED_FILE), '', 'utf8');
 };
 
-const analyze = async (config: ApiDocsConfig) => {
-  const installedFilename = pathlib.join(config.workDir, INSTALLED_FILE);
+/**
+ * Clone, install and set up the repo for the given config, unless it is
+ * already set up at the configured commit.
+ */
+const prepareClone = async (config: ApiDocsConfig) => {
+  const installedFilename = installedMarker(config);
   const installedFileExists = await fileExists(installedFilename);
   if (
     !installedFileExists ||
@@ -91,6 +97,14 @@ const analyze = async (config: ApiDocsConfig) => {
     await fs.writeFile(installedFilename, config.commit, 'utf8');
   } else {
     console.log(`Re-using git repo ${config.gitDir}`);
+  }
+};
+
+const analyze = async (config: ApiDocsConfig) => {
+  if (config.inPlace) {
+    console.log(`Using this repository at ${config.gitDir}`);
+  } else {
+    await prepareClone(config);
   }
 
   console.log(`Analyzing ${config.gitDir}`);
