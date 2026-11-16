@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
 
@@ -33,7 +33,7 @@ jobs:
         run: npm run format:check
 
   tests-local:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       WIREIT_LOGGER: quiet-ci
       WIREIT_PARALLEL: 1
