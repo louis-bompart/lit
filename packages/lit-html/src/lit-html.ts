@@ -1,5 +1,6 @@
 /**
  * @license
+ * Copyright The Lit Project Contributors.
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -2158,13 +2159,15 @@ class ElementPart implements Disconnectable {
   /** @internal */
   _$disconnectableChildren?: Set<Disconnectable> = undefined;
 
+  element: Element;
   options: RenderOptions | undefined;
 
   constructor(
-    public element: Element,
+    element: Element,
     parent: Disconnectable,
     options: RenderOptions | undefined
   ) {
+    this.element = element;
     this._$parent = parent;
     this.options = options;
   }
@@ -2231,7 +2234,7 @@ polyfillSupport?.(Template, ChildPart);
 
 // IMPORTANT: do not change the property name or the assignment expression.
 // This line will be used in regexes to search for lit-html usage.
-(global.litHtmlVersions ??= []).push('3.3.2');
+(global.litHtmlVersions ??= []).push('3.3.3');
 if (DEV_MODE && global.litHtmlVersions.length > 1) {
   queueMicrotask(() => {
     issueWarning!(

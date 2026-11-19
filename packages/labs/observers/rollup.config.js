@@ -1,5 +1,6 @@
 /**
  * @license
+ * Copyright The Lit Project Contributors.
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -16,5 +17,5 @@ export default litProdConfig({
     'intersection-controller',
     'performance-controller',
   ],
-  external: ['@lit/reactive-element'],
+  external: ['@lit/reactive-element', 'lit-html'],
 });
